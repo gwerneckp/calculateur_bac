@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-
 	enum Matiere {
 		ES = 'Enseignement Scientifique',
 		HG = 'Histoire-Géographie',
@@ -222,7 +220,8 @@
 		}
 
 		const moyenneGenerale = sumProduct / totalCoefficient;
-		return moyenneGenerale;
+
+		return Number(moyenneGenerale.toFixed(2));
 	};
 
 	const getMention = (moyenne: number | '-') => {
@@ -254,6 +253,13 @@
 			localStorage.setItem('notes', JSON.stringify(notes));
 		}
 	}
+
+	const validateInput = (e: any) => {
+		const value = parseFloat(e.target.value);
+		if (value < 0 || value > 20) {
+			e.target.value = '';
+		}
+	};
 </script>
 
 <div class="flex justify-center">
@@ -305,6 +311,7 @@
 						<div class="w-full flex justify-center">
 							{#if hasPremiere(note)}
 								<input
+									on:input={validateInput}
 									type="number"
 									bind:value={note.note_premiere}
 									class="w-16 h-full text-center"
@@ -314,6 +321,7 @@
 						<div class="w-full flex justify-center">
 							{#if hasTerminale(note)}
 								<input
+									on:input={validateInput}
 									type="number"
 									bind:value={note.note_terminale}
 									class="w-16 h-full text-center"
@@ -351,6 +359,7 @@
 								<div class="w-full flex justify-center">
 									{#if hasPremiere(note)}
 										<input
+											on:input={validateInput}
 											type="number"
 											bind:value={note.note_premiere}
 											class="w-16 h-full text-center"
@@ -360,6 +369,7 @@
 								<div class="w-full flex justify-center">
 									{#if hasTerminale(note)}
 										<input
+											on:input={validateInput}
 											type="number"
 											bind:value={note.note_terminale}
 											class="w-16 h-full text-center"
@@ -397,6 +407,7 @@
 						<div class="w-full flex justify-center">
 							{#if hasPremiere(note)}
 								<input
+									on:input={validateInput}
 									type="number"
 									bind:value={note.note_premiere}
 									class="w-16 h-full text-center"
@@ -406,6 +417,7 @@
 						<div class="w-full flex justify-center">
 							{#if hasTerminale(note)}
 								<input
+									on:input={validateInput}
 									type="number"
 									bind:value={note.note_terminale}
 									class="w-16 h-full text-center"
@@ -427,11 +439,17 @@
 			>
 		</div>
 
-		<div class="p-3" />
+		<div class="p-6" />
 	</div>
 </div>
 <footer class="footer footer-center p-4 bg-base-300 text-base-content">
 	<div>
-		<p>Rétrouvez le code source sur <a href="">Github</a></p>
+		<p class="font-bold">
+			Les données utilisateur ne sont pas envoyées à un serveur. Retrouvez le code source sur <a
+				target="_blank"
+				class="underline"
+				href="https://github.com/gwerneckp/calculateur_bac">Github.</a
+			>
+		</p>
 	</div>
 </footer>
