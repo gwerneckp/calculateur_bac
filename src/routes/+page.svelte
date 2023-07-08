@@ -243,7 +243,12 @@
 
 	let notes: Notes;
 	if (typeof localStorage !== 'undefined') {
-		notes = JSON.parse(localStorage.getItem('notes') || '');
+		const savedNotes = localStorage.getItem('notes') 
+		if (savedNotes) {
+			notes = JSON.parse(savedNotes);
+		} else {
+			notes = generale;
+		}
 	} else {
 		notes = generale;
 	}
@@ -445,7 +450,7 @@
 <footer class="footer footer-center p-4 bg-base-300 text-base-content">
 	<div>
 		<p class="font-bold">
-			Les données utilisateur ne sont pas envoyées à un serveur. Retrouvez le code source sur <a
+			Les données d'utilisateur ne sont pas envoyées à un serveur. Retrouvez le code source sur <a
 				target="_blank"
 				class="underline"
 				href="https://github.com/gwerneckp/calculateur_bac">Github.</a

@@ -1,0 +1,8 @@
+/* TEAM */
+Developer: Gabriel Werneck Paiva
+Website: calculatrice-bac.fr
+Location: London, United Kingdom
+
+/* SITE */
+Last updated: July 8, 2023
+Standards: HTML5, CSS3, JavaScript
