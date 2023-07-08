@@ -1,38 +1,18 @@
-# create-svelte
+# Calculatrice de Bac
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+Ce site est une calculatrice de bac qui vous permet de calculer votre moyenne et votre mention en fonction de vos notes et coefficients. Il prend en compte à la fois le contrôle continu et les épreuves finales.
 
-## Creating a project
+## Fonctionnalités
 
-If you're seeing this, you've probably already done this step. Congrats!
+- Calcul de la moyenne : Le site calcule automatiquement votre moyenne en fonction des notes et coefficients saisis.
+- Calcul de la mention : Il détermine également la mention que vous obtiendriez en fonction de votre moyenne.
+- Sauvegarde des données : Les notes et coefficients saisis sont sauvegardés dans le navigateur, vous n'avez donc pas à les ressaisir à chaque fois que vous visitez le site. Ces données sont supprimées lorsque vous cliquez sur le bouton "Réinitialiser" et ne sont JAMAIS envoyées à un serveur.
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+## Utilisation
 
-# create a new project in my-app
-npm create svelte@latest my-app
-```
+1. Saisissez vos notes pour les matières du contrôle continu.
+2. Si vous avez choisi des enseignements optionnels, entrez également vos notes pour ces matières.
+3. Entrez vos notes des épreuves finales.
+4. La moyenne et la mention seront calculées automatiquement en fonction des données saisies.
 
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+N'hésitez pas à réinitialiser les notes en cliquant sur le bouton "Réinitialiser" si vous souhaitez recommencer le calcul.

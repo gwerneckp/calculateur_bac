@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
+
 	enum Matiere {
 		ES = 'Enseignement Scientifique',
 		HG = 'Histoire-Géographie',
@@ -160,8 +162,6 @@
 		]
 	};
 
-	let notes = generale;
-
 	const getAllNotes = (notes: Notes): Note[] => {
 		let allNotes: Note[] = [];
 
@@ -241,6 +241,19 @@
 	$: notes_saisies = getNotesSaisies(getAllNotes(notes));
 	$: moyenne = getMoyenne(getAllNotes(notes));
 	$: mention = getMention(moyenne);
+
+	let notes: Notes;
+	if (typeof localStorage !== 'undefined') {
+		notes = JSON.parse(localStorage.getItem('notes') || '');
+	} else {
+		notes = generale;
+	}
+
+	$: {
+		if (typeof localStorage !== 'undefined') {
+			localStorage.setItem('notes', JSON.stringify(notes));
+		}
+	}
 </script>
 
 <div class="flex justify-center">
@@ -311,7 +324,6 @@
 
 					<div class="p-3" />
 				{/each}
-
 				{#if !showOptions}
 					<!-- <div class="flex justify-center">
 				<div class="form-control w-1/2">
@@ -406,5 +418,20 @@
 				{/each}
 			</div>
 		</div>
+
+		<div class="p-3" />
+
+		<div class="flex justify-center">
+			<button class="btn btn-primary normal-case btn-wide" on:click={() => (notes = generale)}
+				>Réinitialiser</button
+			>
+		</div>
+
+		<div class="p-3" />
 	</div>
 </div>
+<footer class="footer footer-center p-4 bg-base-300 text-base-content">
+	<div>
+		<p>Rétrouvez le code source sur <a href="">Github</a></p>
+	</div>
+</footer>
