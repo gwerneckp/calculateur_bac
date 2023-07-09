@@ -205,13 +205,19 @@
 		let sumProduct = 0;
 
 		for (const note of notes) {
-			if (note.note_premiere) {
+			// if the node has a note_premiere and a note_terminale, we get the average of the two notes
+			// else we get the only note available
+
+			if (note.note_premiere && note.note_terminale) {
+				const moyenne = (note.note_premiere + note.note_terminale) / 2;
+				sumProduct += moyenne * note.coefficient;
 				totalCoefficient += note.coefficient;
+			} else if (note.note_premiere) {
 				sumProduct += note.note_premiere * note.coefficient;
-			}
-			if (note.note_terminale) {
 				totalCoefficient += note.coefficient;
+			} else if (note.note_terminale) {
 				sumProduct += note.note_terminale * note.coefficient;
+				totalCoefficient += note.coefficient;
 			}
 		}
 
@@ -243,7 +249,7 @@
 
 	let notes: Notes;
 	if (typeof localStorage !== 'undefined') {
-		const savedNotes = localStorage.getItem('notes') 
+		const savedNotes = localStorage.getItem('notes');
 		if (savedNotes) {
 			notes = JSON.parse(savedNotes);
 		} else {
