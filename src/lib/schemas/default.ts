@@ -200,13 +200,13 @@ export const technologique: Notes = {
 			matiere: Matiere.PHILOSOPHIE,
 			note_premiere: false,
 			note_terminale: null,
-			coefficient: 8
+			coefficient: 4
 		},
 		{
 			matiere: Matiere.ORAL,
 			note_premiere: false,
 			note_terminale: null,
-			coefficient: 10
+			coefficient: 14
 		},
 		{
 			matiere: Matiere.SPE2,
