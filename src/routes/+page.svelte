@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { notesDefault, technologique } from '../lib/schemas/default';
+	import { notesDefault } from '../lib/schemas/default';
+	import deepClone from 'deep-clone';
 	import type { Note, Notes, NotesVoies } from '$lib/types/calculatrice';
 	import { Mentions, Voies } from '$lib/types/enums';
 
@@ -100,7 +101,7 @@
 		if (savedNotes) {
 			myNotes = JSON.parse(savedNotes);
 		} else {
-			myNotes = notesDefault;
+			myNotes = deepClone(notesDefault);
 		}
 
 		const savedVoie = localStorage.getItem('voie');
@@ -110,10 +111,10 @@
 			voie = Voies.GENERALE;
 		}
 	} else {
-		myNotes = notesDefault;
+		myNotes = deepClone(notesDefault);
+		voie = Voies.GENERALE;
 	}
-	myNotes = notesDefault;
-	voie = Voies.GENERALE;
+
 	$: {
 		if (typeof localStorage !== 'undefined') {
 			localStorage.setItem('notes', JSON.stringify(myNotes));
@@ -146,26 +147,30 @@
 		<h1 class="text-xl font-bold text-center">Voie</h1>
 		<div class="p-3">
 			<div class="flex justify-center gap-3">
-				<input
-					class="normal-case btn w-1/2 h-10"
-					type="radio"
-					name="options"
-					bind:group={voie}
-					value={Voies.GENERALE}
-					aria-label={Voies.GENERALE}
-					checked
-				/>
-				<input
-					class="normal-case btn w-1/2 h-10"
-					type="radio"
-					name="options"
-					bind:group={voie}
-					value={Voies.TECHNOLOGIQUE}
-					aria-label={Voies.TECHNOLOGIQUE}
-				/>
+				<div class="w-full">
+					<input
+						class="normal-case btn w-full h-10"
+						type="radio"
+						name="options"
+						bind:group={voie}
+						value={Voies.GENERALE}
+						aria-label={Voies.GENERALE}
+						checked
+					/>
+				</div>
+				<div class="w-full">
+					<input
+						class="normal-case btn w-full h-10"
+						type="radio"
+						name="options"
+						bind:group={voie}
+						value={Voies.TECHNOLOGIQUE}
+						aria-label={Voies.TECHNOLOGIQUE}
+					/>
+				</div>
 			</div>
 		</div>
-		<div class="bg-black p-3 sticky top-0">
+		<div class="bg-base-100 p-3 sticky top-0">
 			<div class="flex gap-3">
 				<div class="bg-base-200 w-full h-20 text-center flex-col flex justify-center">
 					<h1 class="text-2xl font-bold">{notes_saisies[0]}/{notes_saisies[1]}</h1>
@@ -208,7 +213,7 @@
 									on:input={validateInput}
 									type="number"
 									bind:value={note.note_premiere}
-									class="w-16 h-full text-center"
+									class="w-16 h-full text-center bg-primary text-primary-content font-semibold"
 								/>
 							{/if}
 						</div>
@@ -218,7 +223,7 @@
 									on:input={validateInput}
 									type="number"
 									bind:value={note.note_terminale}
-									class="w-16 h-full text-center"
+									class="w-16 h-full text-center bg-primary text-primary-content font-semibold"
 								/>
 							{/if}
 						</div>
@@ -256,8 +261,8 @@
 											on:input={validateInput}
 											type="number"
 											bind:value={note.note_premiere}
-											class="w-16 h-full text-center"
-										/>
+											class="w-16 h-full text-center bg-primary text-primary-content font-semibold"
+											/>
 									{/if}
 								</div>
 								<div class="w-full flex justify-center">
@@ -266,8 +271,8 @@
 											on:input={validateInput}
 											type="number"
 											bind:value={note.note_terminale}
-											class="w-16 h-full text-center"
-										/>
+											class="w-16 h-full text-center bg-primary text-primary-content font-semibold"
+											/>
 									{/if}
 								</div>
 							</div>
@@ -304,7 +309,7 @@
 									on:input={validateInput}
 									type="number"
 									bind:value={note.note_premiere}
-									class="w-16 h-full text-center"
+									class="w-16 h-full text-center bg-primary text-primary-content font-semibold"
 								/>
 							{/if}
 						</div>
@@ -314,7 +319,7 @@
 									on:input={validateInput}
 									type="number"
 									bind:value={note.note_terminale}
-									class="w-16 h-full text-center"
+									class="w-16 h-full text-center bg-primary text-primary-content font-semibold"
 								/>
 							{/if}
 						</div>
@@ -325,15 +330,15 @@
 			</div>
 		</div>
 
-		<div class="p-3" />
-
-		<div class="flex justify-center">
-			<button class="btn btn-primary normal-case btn-wide" on:click={() => (myNotes = notesDefault)}
-				>Réinitialiser</button
-			>
+		<div class="sticky bottom-0 p-3 bg-base-100">
+			<div class="flex justify-center">
+				<button
+					class="btn btn-primary normal-case btn-wide"
+					on:click={() => (myNotes = deepClone(notesDefault))}>Réinitialiser</button
+				>
+			</div>
 		</div>
-
-		<div class="p-6" />
+		<div class="p-3" />
 	</div>
 </div>
 <footer class="footer footer-center p-4 bg-base-300 text-base-content">

@@ -30,6 +30,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"deep-clone": "^4.0.0",
 		"svelte-local-storage-store": "^0.5.0",
 		"svelte-storable": "^1.0.4"
 	}
