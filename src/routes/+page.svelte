@@ -1,164 +1,10 @@
 <script lang="ts">
-	enum Matiere {
-		ES = 'Enseignement Scientifique',
-		HG = 'Histoire-Géographie',
-		EMC = 'Enseignement Moral et Civique',
-		LV1 = 'Langue vivante 1',
-		LV2 = 'Langue vivante 2',
-		SPE1 = 'Enseignement de Spécialité 1',
-		SPE2 = 'Enseignement de Spécialité 2',
-		SPE3 = 'Enseignement de Spécialité 3',
-		EPS = 'Education Physique et Sportive',
-		FR_ECRIT = 'Français écrit',
-		FR_ORAL = 'Français oral',
-		PHILOSOPHIE = 'Philosophie',
-		ORAL = 'Grand oral',
-
-		OPTION1 = 'Enseignement optionnel 1',
-		OPTION2 = 'Enseignement optionnel 2',
-		ANTIQUITE1 = "Langues et cultures de l'Antiquité 1",
-		ANTIQUITE2 = "Langues et cultures de l'Antiquité 2"
-	}
-
-	enum Mentions {
-		RECALE = 'Recalé',
-		RATTRAPAGE = 'Rattrapage',
-		ADMIS = 'Admis',
-		ASSEZ_BIEN = 'Assez Bien',
-		BIEN = 'Bien',
-		TRES_BIEN = 'Très Bien',
-		FELICITATIONS = 'Félicitations du Jury'
-	}
-
-	type Note = {
-		matiere: Matiere;
-		// number = note assignée
-		// null = note non assignée
-		// false = pas de note cette année
-		note_premiere: number | null | false;
-		note_terminale: number | null | false;
-		coefficient: number;
-	};
+	import { notesDefault, technologique } from '../lib/schemas/default';
+	import type { Note, Notes, NotesVoies } from '$lib/types/calculatrice';
+	import { Mentions, Voies } from '$lib/types/enums';
 
 	const hasPremiere = (note: Note) => note.note_premiere !== false;
 	const hasTerminale = (note: Note) => note.note_terminale !== false;
-
-	type Notes = {
-		continu: Note[];
-		optionnelles: Note[];
-		epreuves: Note[];
-	};
-
-	const generale: Notes = {
-		continu: [
-			{
-				matiere: Matiere.ES,
-				note_premiere: null,
-				note_terminale: null,
-				coefficient: 6
-			},
-			{
-				matiere: Matiere.HG,
-				note_premiere: null,
-				note_terminale: null,
-				coefficient: 6
-			},
-			{
-				matiere: Matiere.LV1,
-				note_premiere: null,
-				note_terminale: null,
-				coefficient: 6
-			},
-			{
-				matiere: Matiere.LV2,
-				note_premiere: null,
-				note_terminale: null,
-				coefficient: 6
-			},
-			{
-				matiere: Matiere.SPE1,
-				note_premiere: null,
-				note_terminale: false,
-				coefficient: 8
-			},
-			{
-				matiere: Matiere.EPS,
-				note_premiere: false,
-				note_terminale: null,
-				coefficient: 6
-			},
-			{
-				matiere: Matiere.EMC,
-				note_premiere: null,
-				note_terminale: null,
-				coefficient: 2
-			}
-		],
-		optionnelles: [
-			{
-				matiere: Matiere.OPTION1,
-				note_premiere: null,
-				note_terminale: null,
-				coefficient: 4
-			},
-			{
-				matiere: Matiere.OPTION2,
-				note_premiere: false,
-				note_terminale: null,
-				coefficient: 2
-			},
-			{
-				matiere: Matiere.ANTIQUITE1,
-				note_premiere: null,
-				note_terminale: null,
-				coefficient: 4
-			},
-			{
-				matiere: Matiere.ANTIQUITE2,
-				note_premiere: null,
-				note_terminale: null,
-				coefficient: 4
-			}
-		],
-		epreuves: [
-			{
-				matiere: Matiere.FR_ECRIT,
-				note_premiere: null,
-				note_terminale: false,
-				coefficient: 5
-			},
-			{
-				matiere: Matiere.FR_ORAL,
-				note_premiere: null,
-				note_terminale: false,
-				coefficient: 5
-			},
-			{
-				matiere: Matiere.PHILOSOPHIE,
-				note_premiere: false,
-				note_terminale: null,
-				coefficient: 8
-			},
-			{
-				matiere: Matiere.ORAL,
-				note_premiere: false,
-				note_terminale: null,
-				coefficient: 10
-			},
-			{
-				matiere: Matiere.SPE2,
-				note_premiere: false,
-				note_terminale: null,
-				coefficient: 16
-			},
-			{
-				matiere: Matiere.SPE3,
-				note_premiere: false,
-				note_terminale: null,
-				coefficient: 16
-			}
-		]
-	};
 
 	const getAllNotes = (notes: Notes): Note[] => {
 		let allNotes: Note[] = [];
@@ -243,25 +89,40 @@
 
 	let showOptions = false;
 
-	$: notes_saisies = getNotesSaisies(getAllNotes(notes));
-	$: moyenne = getMoyenne(getAllNotes(notes));
+	$: notes_saisies = getNotesSaisies(getAllNotes(myNotes[voie]));
+	$: moyenne = getMoyenne(getAllNotes(myNotes[voie]));
 	$: mention = getMention(moyenne);
 
-	let notes: Notes;
+	let myNotes: NotesVoies;
+	let voie: Voies;
 	if (typeof localStorage !== 'undefined') {
 		const savedNotes = localStorage.getItem('notes');
 		if (savedNotes) {
-			notes = JSON.parse(savedNotes);
+			myNotes = JSON.parse(savedNotes);
 		} else {
-			notes = generale;
+			myNotes = notesDefault;
+		}
+
+		const savedVoie = localStorage.getItem('voie');
+		if (savedVoie) {
+			voie = savedVoie as Voies;
+		} else {
+			voie = Voies.GENERALE;
 		}
 	} else {
-		notes = generale;
+		myNotes = notesDefault;
+	}
+	myNotes = notesDefault;
+	voie = Voies.GENERALE;
+	$: {
+		if (typeof localStorage !== 'undefined') {
+			localStorage.setItem('notes', JSON.stringify(myNotes));
+		}
 	}
 
 	$: {
 		if (typeof localStorage !== 'undefined') {
-			localStorage.setItem('notes', JSON.stringify(notes));
+			localStorage.setItem('voie', voie);
 		}
 	}
 
@@ -282,6 +143,28 @@
 			</p>
 		</div>
 
+		<h1 class="text-xl font-bold text-center">Voie</h1>
+		<div class="p-3">
+			<div class="flex justify-center gap-3">
+				<input
+					class="normal-case btn w-1/2 h-10"
+					type="radio"
+					name="options"
+					bind:group={voie}
+					value={Voies.GENERALE}
+					aria-label={Voies.GENERALE}
+					checked
+				/>
+				<input
+					class="normal-case btn w-1/2 h-10"
+					type="radio"
+					name="options"
+					bind:group={voie}
+					value={Voies.TECHNOLOGIQUE}
+					aria-label={Voies.TECHNOLOGIQUE}
+				/>
+			</div>
+		</div>
 		<div class="bg-black p-3 sticky top-0">
 			<div class="flex gap-3">
 				<div class="bg-base-200 w-full h-20 text-center flex-col flex justify-center">
@@ -312,7 +195,7 @@
 				</div>
 			</div>
 			<div class="bg-base-200 pt-3">
-				{#each notes.continu as note}
+				{#each myNotes[voie].continu as note}
 					<div class="w-full h-10 flex-col flex justify-center text-center">
 						<p class="font-semibold">{note.matiere}</p>
 						<p class="text-sm">Coéfficient {note.coefficient}</p>
@@ -360,7 +243,7 @@
 
 				{#if showOptions}
 					<div class="bg-base-300 pt-6">
-						{#each notes.optionnelles as note}
+						{#each myNotes[voie].optionnelles as note}
 							<div class="w-full h-10 flex-col flex justify-center text-center">
 								<p class="font-semibold">{note.matiere}</p>
 								<p class="text-sm">Coéfficient {note.coefficient}</p>
@@ -408,7 +291,7 @@
 				</div>
 			</div>
 			<div class="bg-base-200 pt-3">
-				{#each notes.epreuves as note}
+				{#each myNotes[voie].epreuves as note}
 					<div class="w-full h-10 flex-col flex justify-center text-center">
 						<p class="font-semibold">{note.matiere}</p>
 						<p class="text-sm">Coéfficient {note.coefficient}</p>
@@ -445,7 +328,7 @@
 		<div class="p-3" />
 
 		<div class="flex justify-center">
-			<button class="btn btn-primary normal-case btn-wide" on:click={() => (notes = generale)}
+			<button class="btn btn-primary normal-case btn-wide" on:click={() => (myNotes = notesDefault)}
 				>Réinitialiser</button
 			>
 		</div>
