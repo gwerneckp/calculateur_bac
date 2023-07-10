@@ -7,6 +7,7 @@ Ce site est une calculatrice de bac qui vous permet de calculer votre moyenne et
 - Calcul de la moyenne : Le site calcule automatiquement votre moyenne en fonction des notes et coefficients saisis.
 - Calcul de la mention : Il détermine également la mention que vous obtiendriez en fonction de votre moyenne.
 - Sauvegarde des données : Les notes et coefficients saisis sont sauvegardés dans le navigateur, vous n'avez donc pas à les ressaisir à chaque fois que vous visitez le site. Ces données sont supprimées lorsque vous cliquez sur le bouton "Réinitialiser" et ne sont JAMAIS envoyées à un serveur.
+- Voie générale et technologique : Le site prend en charge les deux voies du bac, à savoir la voie générale et la voie technologique.
 
 ## Utilisation
 
