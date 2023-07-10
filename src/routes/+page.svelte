@@ -55,14 +55,14 @@
 			// if the node has a note_premiere and a note_terminale, we get the average of the two notes
 			// else we get the only note available
 
-			if (note.note_premiere && note.note_terminale) {
+			if (typeof note.note_premiere === 'number' && typeof note.note_terminale === 'number') {
 				const moyenne = (note.note_premiere + note.note_terminale) / 2;
 				sumProduct += moyenne * note.coefficient;
 				totalCoefficient += note.coefficient;
-			} else if (note.note_premiere) {
+			} else if (typeof note.note_premiere === 'number') {
 				sumProduct += note.note_premiere * note.coefficient;
 				totalCoefficient += note.coefficient;
-			} else if (note.note_terminale) {
+			} else if (typeof note.note_terminale === 'number') {
 				sumProduct += note.note_terminale * note.coefficient;
 				totalCoefficient += note.coefficient;
 			}
@@ -129,8 +129,12 @@
 
 	const validateInput = (e: any) => {
 		const value = parseFloat(e.target.value);
-		if (value < 0 || value > 20) {
+		if (isNaN(value)) {
 			e.target.value = '';
+		} else {
+			if (value < 0 || value > 20) {
+				e.target.value = '';
+			}
 		}
 	};
 </script>
@@ -262,7 +266,7 @@
 											type="number"
 											bind:value={note.note_premiere}
 											class="w-16 h-full text-center bg-primary text-primary-content font-semibold"
-											/>
+										/>
 									{/if}
 								</div>
 								<div class="w-full flex justify-center">
@@ -272,7 +276,7 @@
 											type="number"
 											bind:value={note.note_terminale}
 											class="w-16 h-full text-center bg-primary text-primary-content font-semibold"
-											/>
+										/>
 									{/if}
 								</div>
 							</div>
