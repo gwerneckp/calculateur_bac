@@ -3,6 +3,7 @@
 	import deepClone from 'deep-clone';
 	import type { Note, Notes, NotesVoies } from '$lib/types/calculatrice';
 	import { Mentions, Voies } from '$lib/types/enums';
+	import Mention from '$lib/components/Mention.svelte';
 
 	const hasPremiere = (note: Note) => note.note_premiere !== false;
 	const hasTerminale = (note: Note) => note.note_terminale !== false;
@@ -77,22 +78,10 @@
 		return Number(moyenneGenerale.toFixed(2));
 	};
 
-	const getMention = (moyenne: number | '-') => {
-		if (moyenne === '-') return '-';
-		if (moyenne < 8) return Mentions.RECALE;
-		if (moyenne < 10) return Mentions.RATTRAPAGE;
-		if (moyenne < 12) return Mentions.ADMIS;
-		if (moyenne < 14) return Mentions.ASSEZ_BIEN;
-		if (moyenne < 16) return Mentions.BIEN;
-		if (moyenne < 18) return Mentions.TRES_BIEN;
-		return Mentions.FELICITATIONS;
-	};
-
 	let showOptions = false;
 
 	$: notes_saisies = getNotesSaisies(getAllNotes(myNotes[voie]));
 	$: moyenne = getMoyenne(getAllNotes(myNotes[voie]));
-	$: mention = getMention(moyenne);
 
 	let myNotes: NotesVoies;
 	let voie: Voies;
@@ -182,10 +171,7 @@
 				</div>
 			</div>
 			<div class="p-1.5" />
-			<div class="bg-base-200 w-full h-20 text-center flex-col flex justify-center">
-				<h1 class="text-2xl font-bold">{mention}</h1>
-				<p>Mention</p>
-			</div>
+			<Mention {moyenne} />
 		</div>
 
 		<div class="p-3" />
@@ -262,7 +248,7 @@
 											type="number"
 											bind:value={note.note_premiere}
 											class="w-16 h-full text-center bg-primary text-primary-content font-semibold"
-											/>
+										/>
 									{/if}
 								</div>
 								<div class="w-full flex justify-center">
@@ -272,7 +258,7 @@
 											type="number"
 											bind:value={note.note_terminale}
 											class="w-16 h-full text-center bg-primary text-primary-content font-semibold"
-											/>
+										/>
 									{/if}
 								</div>
 							</div>
@@ -346,9 +332,30 @@
 		<p class="font-bold">
 			Les données d'utilisateur ne sont pas envoyées à un serveur. Retrouvez le code source sur <a
 				target="_blank"
-				class="underline"
+				class="underline link-pretty"
 				href="https://github.com/gwerneckp/calculateur_bac">Github.</a
 			>
 		</p>
 	</div>
 </footer>
+
+<style>
+	a.link-pretty {
+		text-decoration: underline;
+		background-color: transparent;
+		transition: all 0.15s ease;
+		background-size: 100% 0; /* Initially set background size to 0 vertically */
+		background-repeat: no-repeat;
+		background-position: 0 100%; /* Start the gradient from the bottom */
+	}
+
+	a.link-pretty:hover {
+		text-decoration: none;
+		background-image: linear-gradient(
+			white,
+			white
+		); /* Create a gradient from transparent to white */
+		background-size: 100% 100%; /* Increase the background size to 100% vertically on hover */
+		color: black;
+	}
+</style>
